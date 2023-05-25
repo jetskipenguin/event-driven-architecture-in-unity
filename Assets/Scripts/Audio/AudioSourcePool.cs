@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class AudioSourcePool : MonoBehaviour
 {
-    [SerializeField] private AudioSource _prefab;
+    [SerializeField] internal AudioSource _prefab;
 
-    [SerializeField] private int _initialSize = 10;
+    [SerializeField] internal int _initialSize = 10;
 
-    private readonly List<AudioSource> _pool = new List<AudioSource>();
-    private GameObject _parentObject;
+    internal readonly List<AudioSource> _pool = new List<AudioSource>();
+    internal GameObject _parentObject;
 
     private void OnEnable()
     {
-        _parentObject = Object.Instantiate(new GameObject("AudioSourcePool"), gameObject.transform);
+        _parentObject = new GameObject("Audio Sources");
         
         for (int i = 0; i < _initialSize; i++)
         {

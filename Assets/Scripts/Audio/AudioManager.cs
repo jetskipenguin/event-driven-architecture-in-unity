@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -7,31 +8,63 @@ public class AudioManager : MonoBehaviour
 {
     [Header("Audio control")]
 	[SerializeField] private AudioMixer audioMixer = default;
-	[Range(0f, 1f)]
-	[SerializeField] private float _masterVolume = 1f;
-	[Range(0f, 1f)]
+    [Range(0f, 1f)]
+    [SerializeField] private float _masterVolume = 1f;
+
+    [Header("Listening on channels")]
+    [Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change SFXs volume")]
+	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
+	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
+	
 
     private AudioSourcePool _audioSourcePool = default;
 
     private void Start()
     {
         _audioSourcePool = GetComponent<AudioSourcePool>();
-    }
 
-    private void ChangeMasterVolume(float newVolume)
-    {
-        _masterVolume = newVolume;
         SetGroupVolume("MasterVolume", _masterVolume);
     }
 
-    private void PlaySound(AudioClip clip, float volume)
+    private void OnEnable()
     {
-        var audioSource = _audioSourcePool.Get();
-        audioSource.clip = clip;
-        audioSource.volume = volume * _masterVolume;
-        audioSource.Play();
-        StartCoroutine(ReturnAudioSource(audioSource));
+        _SFXEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+        _musicEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
     }
+
+    private void OnDestroy()
+    {
+        _SFXEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+        _musicEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+    }
+
+    public string PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
+	{
+		AudioClip[] clipsToPlay = audioCue.GetClips();
+		AudioSource[] sources = new AudioSource[clipsToPlay.Length];
+
+		int nOfClips = clipsToPlay.Length;
+		for (int i = 0; i < nOfClips; i++)
+		{
+			sources[i] = _audioSourcePool.Get();
+			if (sources[i] != null)
+			{
+                sources[i].transform.position = position;
+                settings.ApplyTo(sources[i]);
+                sources[i].clip = clipsToPlay[i];
+                sources[i].Play();
+				StartCoroutine(ReturnAudioSource(sources[i]));
+			}
+            else
+            {
+                Debug.LogError("No audio source available, issue in AudioSourcePool");
+            }
+		}
+
+        // return ID used to identify the AudioSources later
+		return string.Join(", ", clipsToPlay.Select(clip => clip.name));
+	}
 
     private IEnumerator ReturnAudioSource(AudioSource audioSource)
     {
