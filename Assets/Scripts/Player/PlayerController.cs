@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed = 5f;
 
     [Header("Asset References")]
-    [SerializeField] private InputReader _inputReader = default;
+    [SerializeField] private InputReaderSO _inputReader = default;
 
     private Vector2 _inputVector;
     private Rigidbody2D _rb;

@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] internal GameObject _pauseMenu = default;
 
     [Header("Asset References")]
-    [SerializeField] internal InputReader _inputReader = default;
+    [SerializeField] internal InputReaderSO _inputReader = default;
     
     private void OnEnable()
     {

@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "InputReaderSO", menuName = "ScriptableObjects/InputReader")]
+[CreateAssetMenu(fileName = "InputReaderSO", menuName = "ScriptableObjects/Input/InputReader")]
 
-public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IMenusActions
+public class InputReaderSO : ScriptableObject, GameInput.IGameplayActions, GameInput.IMenusActions
 {
     public event UnityAction<Vector2> MoveEvent = delegate { };
     public event UnityAction PauseEvent = delegate { };
@@ -42,20 +42,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     }
 
     // --- Event Listeners ---
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        MoveEvent.Invoke(context.ReadValue<Vector2>());
-    }
-
-    public void OnPause(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			PauseEvent.Invoke();
-	}
-
-    public void OnUnpause(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			UnpauseEvent.Invoke();
-	}
+    public void OnMove(InputAction.CallbackContext context) { MoveEvent.Invoke(context.ReadValue<Vector2>());}
+    public void OnPause(InputAction.CallbackContext context) { PauseEvent.Invoke();}
+    public void OnUnpause(InputAction.CallbackContext context) { UnpauseEvent.Invoke();}
 }

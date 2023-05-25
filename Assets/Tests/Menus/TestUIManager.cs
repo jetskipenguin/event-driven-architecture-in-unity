@@ -7,7 +7,7 @@ using UnityEngine.TestTools;
 public class TestUIManager
 {
     private UIManager uiManager;
-    private InputReader inputReader;
+    private InputReaderSO inputReader;
 
     [SetUp]
     public void SetUp()
@@ -16,7 +16,7 @@ public class TestUIManager
         testObject.AddComponent<UIManager>();
 
         uiManager = testObject.GetComponent<UIManager>();
-        inputReader = ScriptableObject.CreateInstance<InputReader>();
+        inputReader = ScriptableObject.CreateInstance<InputReaderSO>();
         uiManager._pauseMenu = new GameObject();
 
         uiManager._inputReader = inputReader;
