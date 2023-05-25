@@ -19,16 +19,11 @@ public class AudioManager : MonoBehaviour
 	
 
     private AudioSourcePool _audioSourcePool = default;
-
-    private void Start()
-    {
-        _audioSourcePool = GetComponent<AudioSourcePool>();
-
-        SetGroupVolume("MasterVolume", _masterVolume);
-    }
-
     private void OnEnable()
     {
+        _audioSourcePool = GetComponent<AudioSourcePool>();
+        SetGroupVolume("MasterVolume", _masterVolume);
+
         _SFXEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
         _musicEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
     }
@@ -54,7 +49,9 @@ public class AudioManager : MonoBehaviour
                 settings.ApplyTo(sources[i]);
                 sources[i].clip = clipsToPlay[i];
                 sources[i].Play();
-				StartCoroutine(ReturnAudioSource(sources[i]));
+
+                if(!audioCue.looping)
+				    StartCoroutine(ReturnAudioSource(sources[i]));
 			}
             else
             {
@@ -63,7 +60,7 @@ public class AudioManager : MonoBehaviour
 		}
 
         // return ID used to identify the AudioSources later
-		return string.Join(", ", clipsToPlay.Select(clip => clip.name));
+		return string.Join(".", clipsToPlay.Select(clip => clip.name));
 	}
 
     private IEnumerator ReturnAudioSource(AudioSource audioSource)

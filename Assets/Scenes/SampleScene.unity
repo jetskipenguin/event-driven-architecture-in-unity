@@ -275,6 +275,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &875327761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 875327762}
+  - component: {fileID: 875327763}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &875327762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875327761}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0621015, y: 0.7302749, z: -0.046507493}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &875327763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875327761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c01040058504acf4294687c22b9a15bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _musicSO: {fileID: 11400000, guid: c74bce63ea8b515408050f0f49b768a5, type: 2}
+  _audioConfig: {fileID: 11400000, guid: b226dddd9b7a2234a9660fc719326d81, type: 2}
+  _musicEventChannel: {fileID: 11400000, guid: 696554155f65e834ab5e3b4da5eb6266, type: 2}
 --- !u!1 &1893418122
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +405,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1893418125
 BoxCollider2D:
@@ -549,7 +596,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7586550267408639388, guid: c282b5142a7157d4283afb07302215ab, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7586550267408639388, guid: c282b5142a7157d4283afb07302215ab, type: 3}
       propertyPath: m_LocalPosition.x
