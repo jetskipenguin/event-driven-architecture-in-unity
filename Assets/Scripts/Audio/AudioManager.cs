@@ -32,11 +32,13 @@ public class AudioManager : MonoBehaviour
     private void OnEnable()
     {
         _audioChannels.ForEach(d => d.OnAudioCuePlayRequested += PlayAudioCue);
+        _audioChannels.ForEach(d => d.OnAudioCueStopRequested += StopAudioCue);
     }
 
     private void OnDestroy()
     {
         _audioChannels.ForEach(d => d.OnAudioCuePlayRequested -= PlayAudioCue);
+        _audioChannels.ForEach(d => d.OnAudioCueStopRequested -= StopAudioCue);
     }
 
     public int PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
@@ -67,6 +69,18 @@ public class AudioManager : MonoBehaviour
 		}
 		return id;
 	}
+
+    public bool StopAudioCue(int audioCueKey)
+    {
+        if (_audioSourcePool._activeSources.ContainsKey(audioCueKey))
+        {
+            AudioSource audioSource = _audioSourcePool._activeSources[audioCueKey];
+            _audioSourcePool.Return(audioCueKey);
+            return true;
+        }
+
+        return false;
+    }
 
     private IEnumerator ReturnAudioSource(AudioSource audioSource, int id)
     {

@@ -8,8 +8,6 @@ public class AudioCueEventChannelSO : ScriptableObject
 {
 	public AudioCuePlayAction OnAudioCuePlayRequested;
 	public AudioCueStopAction OnAudioCueStopRequested;
-	public AudioCueFinishAction OnAudioCueFinishRequested;
-
 	public int RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
 	{
 		int audioCueKey = -1;
@@ -32,8 +30,25 @@ public class AudioCueEventChannelSO : ScriptableObject
 
 		return audioCueKey;
 	}
+
+	public bool RaiseStopEvent(int audioCueKey)
+	{
+		bool success = false;
+
+		if (OnAudioCueStopRequested != null)
+		{
+			success = OnAudioCueStopRequested.Invoke(audioCueKey);
+		}
+		else
+		{
+			Debug.LogWarning("An AudioCue stop event was requested for " + audioCueKey + ", but nobody picked it up. " +
+				"Check why there is no AudioManager already loaded, " +
+				"and make sure it's listening on this AudioCue Event channel.");
+		}
+
+		return success;
+	}
 }
 
 public delegate int AudioCuePlayAction(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace);
 public delegate bool AudioCueStopAction(int audioCueKey);
-public delegate bool AudioCueFinishAction(int audioCueKey);
