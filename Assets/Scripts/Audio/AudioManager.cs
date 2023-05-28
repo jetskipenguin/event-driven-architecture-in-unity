@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
 	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
 
-    private Dictionary<int, AudioSource[]> _activeAudioCues = new Dictionary<int, AudioSource[]>();
+    private Dictionary<int, List<AudioSource>> _activeAudioCues = new Dictionary<int, List<AudioSource>>();
     private int _nextUniqueID = 0;
     
     private List<AudioCueEventChannelSO> _audioChannels = new List<AudioCueEventChannelSO>();
@@ -46,34 +46,31 @@ public class AudioManager : MonoBehaviour
 
     public int PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
 	{
-		AudioClip[] clipsToPlay = audioCue.GetClips();
-		AudioSource[] sources = new AudioSource[clipsToPlay.Length];
-
-		int nOfClips = clipsToPlay.Length;
-		for (int i = 0; i < nOfClips; i++)
-		{
-            
-			sources[i] = _audioSourcePool.Get();
-			if (sources[i] != null)
-			{
-                sources[i].transform.position = position;
-                settings.ApplyTo(sources[i]);
-                sources[i].clip = clipsToPlay[i];
-                sources[i].Play();
-
-                if(!audioCue.looping)
-				    StartCoroutine(ReturnAudioSource(sources[i]));
-			}
-            else
-            {
-                Debug.LogError("No audio source available, issue in AudioSourcePool");
-            }
-		}
+		List<AudioClip> clipsToPlay = audioCue.GetClips().ToList();
+        List<AudioSource> sources = clipsToPlay.Select(clip => SetupAudioSource(position, clip, audioCue.looping, settings)).ToList();
 
         _activeAudioCues.Add(++_nextUniqueID, sources);
 
 		return _nextUniqueID;
 	}
+
+    private AudioSource SetupAudioSource(Vector3 position, AudioClip clip, bool isLooping, AudioConfigurationSO settings)
+    {
+        AudioSource source = _audioSourcePool.Get();
+        if (!source)
+        {
+            Debug.LogError("No audio source available, issue in AudioSourcePool");
+            return null;
+        }
+
+        source.transform.position = position;
+        settings.ApplyTo(source);
+        source.clip = clip;
+        source.loop = isLooping;
+        source.Play();
+
+        return source;
+    }
 
     public bool StopAudioCue(int audioCueKey)
     {
