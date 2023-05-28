@@ -10,9 +10,9 @@ public class AudioCueEventChannelSO : ScriptableObject
 	public AudioCueStopAction OnAudioCueStopRequested;
 	public AudioCueFinishAction OnAudioCueFinishRequested;
 
-	public string RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
+	public int RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
 	{
-		string audioCueKey = string.Empty;
+		int audioCueKey = -1;
 
 		if (OnAudioCuePlayRequested != null)
 		{
@@ -25,10 +25,15 @@ public class AudioCueEventChannelSO : ScriptableObject
 				"and make sure it's listening on this AudioCue Event channel.");
 		}
 
+		if (audioCueKey == -1)
+		{
+			Debug.LogWarning("An AudioCue play event was requested  for " + audioCue.name + ", it was picked up, but had no ID returned");
+		}
+
 		return audioCueKey;
 	}
 }
 
-public delegate string AudioCuePlayAction(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace);
-public delegate bool AudioCueStopAction(string emitterKey);
-public delegate bool AudioCueFinishAction(string emitterKey);
+public delegate int AudioCuePlayAction(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace);
+public delegate bool AudioCueStopAction(int audioCueKey);
+public delegate bool AudioCueFinishAction(int audioCueKey);

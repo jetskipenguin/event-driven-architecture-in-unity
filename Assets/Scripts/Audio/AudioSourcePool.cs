@@ -4,7 +4,6 @@ using UnityEngine;
 public class AudioSourcePool : MonoBehaviour
 {
     [SerializeField] internal AudioSource _prefab;
-
     [SerializeField] internal int _initialSize = 10;
 
     internal List<AudioSource> _pool = new List<AudioSource>();

@@ -39,15 +39,16 @@ public class AudioManager : MonoBehaviour
         _audioChannels.ForEach(d => d.OnAudioCuePlayRequested -= PlayAudioCue);
     }
 
-    public string PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
+    public int PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
 	{
 		AudioClip[] clipsToPlay = audioCue.GetClips();
 		AudioSource[] sources = new AudioSource[clipsToPlay.Length];
+        int id = -1;
 
 		int nOfClips = clipsToPlay.Length;
 		for (int i = 0; i < nOfClips; i++)
 		{
-            int id;
+            
 			(sources[i], id) = _audioSourcePool.Get();
 			if (sources[i] != null)
 			{
@@ -64,9 +65,7 @@ public class AudioManager : MonoBehaviour
                 Debug.LogError("No audio source available, issue in AudioSourcePool");
             }
 		}
-
-        // return ID used to identify the AudioSources later
-		return string.Join(".", clipsToPlay.Select(clip => clip.name));
+		return id;
 	}
 
     private IEnumerator ReturnAudioSource(AudioSource audioSource, int id)
