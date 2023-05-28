@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -17,21 +18,25 @@ public class AudioManager : MonoBehaviour
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
 	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
 	
-
+    private List<AudioCueEventChannelSO> _audioChannels = new List<AudioCueEventChannelSO>();
     private AudioSourcePool _audioSourcePool = default;
-    private void OnEnable()
+
+    void Awake()
     {
         _audioSourcePool = GetComponent<AudioSourcePool>();
         SetGroupVolume("MasterVolume", _masterVolume);
 
-        _SFXEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
-        _musicEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+        _audioChannels.AddRange(new[]  { _SFXEventChannel, _musicEventChannel});
+    }
+
+    private void OnEnable()
+    {
+        _audioChannels.ForEach(d => d.OnAudioCuePlayRequested += PlayAudioCue);
     }
 
     private void OnDestroy()
     {
-        _SFXEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
-        _musicEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+        _audioChannels.ForEach(d => d.OnAudioCuePlayRequested -= PlayAudioCue);
     }
 
     public string PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
