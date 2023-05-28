@@ -17,7 +17,10 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
 	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
-	
+
+    private Dictionary<int, AudioSource[]> _activeAudioCues = new Dictionary<int, AudioSource[]>();
+    private int _nextUniqueID = 0;
+    
     private List<AudioCueEventChannelSO> _audioChannels = new List<AudioCueEventChannelSO>();
     private AudioSourcePool _audioSourcePool = default;
 
@@ -45,13 +48,12 @@ public class AudioManager : MonoBehaviour
 	{
 		AudioClip[] clipsToPlay = audioCue.GetClips();
 		AudioSource[] sources = new AudioSource[clipsToPlay.Length];
-        int id = -1;
 
 		int nOfClips = clipsToPlay.Length;
 		for (int i = 0; i < nOfClips; i++)
 		{
             
-			(sources[i], id) = _audioSourcePool.Get();
+			sources[i] = _audioSourcePool.Get();
 			if (sources[i] != null)
 			{
                 sources[i].transform.position = position;
@@ -60,32 +62,33 @@ public class AudioManager : MonoBehaviour
                 sources[i].Play();
 
                 if(!audioCue.looping)
-				    StartCoroutine(ReturnAudioSource(sources[i], id));
+				    StartCoroutine(ReturnAudioSource(sources[i]));
 			}
             else
             {
                 Debug.LogError("No audio source available, issue in AudioSourcePool");
             }
 		}
-		return id;
+
+        _activeAudioCues.Add(++_nextUniqueID, sources);
+
+		return _nextUniqueID;
 	}
 
     public bool StopAudioCue(int audioCueKey)
     {
-        if (_audioSourcePool._activeSources.ContainsKey(audioCueKey))
+        if (_activeAudioCues.ContainsKey(audioCueKey))
         {
-            AudioSource audioSource = _audioSourcePool._activeSources[audioCueKey];
-            _audioSourcePool.Return(audioCueKey);
+            _activeAudioCues[audioCueKey].ToList().ForEach(s => _audioSourcePool.Return(s));
             return true;
         }
-
         return false;
     }
 
-    private IEnumerator ReturnAudioSource(AudioSource audioSource, int id)
+    private IEnumerator ReturnAudioSource(AudioSource audioSource)
     {
         yield return new WaitForSeconds(audioSource.clip.length);
-        _audioSourcePool.Return(id);
+        _audioSourcePool.Return(audioSource);
     }
 
     public void SetGroupVolume(string parameterName, float normalizedVolume)
