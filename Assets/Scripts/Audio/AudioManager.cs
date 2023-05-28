@@ -47,7 +47,8 @@ public class AudioManager : MonoBehaviour
 		int nOfClips = clipsToPlay.Length;
 		for (int i = 0; i < nOfClips; i++)
 		{
-			sources[i] = _audioSourcePool.Get();
+            int id;
+			(sources[i], id) = _audioSourcePool.Get();
 			if (sources[i] != null)
 			{
                 sources[i].transform.position = position;
@@ -56,7 +57,7 @@ public class AudioManager : MonoBehaviour
                 sources[i].Play();
 
                 if(!audioCue.looping)
-				    StartCoroutine(ReturnAudioSource(sources[i]));
+				    StartCoroutine(ReturnAudioSource(sources[i], id));
 			}
             else
             {
@@ -68,10 +69,10 @@ public class AudioManager : MonoBehaviour
 		return string.Join(".", clipsToPlay.Select(clip => clip.name));
 	}
 
-    private IEnumerator ReturnAudioSource(AudioSource audioSource)
+    private IEnumerator ReturnAudioSource(AudioSource audioSource, int id)
     {
         yield return new WaitForSeconds(audioSource.clip.length);
-        _audioSourcePool.Return(audioSource);
+        _audioSourcePool.Return(id);
     }
 
     public void SetGroupVolume(string parameterName, float normalizedVolume)
