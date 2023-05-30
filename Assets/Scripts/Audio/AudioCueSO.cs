@@ -5,9 +5,9 @@ using UnityEngine;
 /// A collection of audio clips that are played in parallel, and support randomisation.
 /// </summary>
 [CreateAssetMenu(fileName = "newAudioCue", menuName = "ScriptableObjects/Audio/Audio Cue")]
-public class AudioCueSO : ScriptableObject
+public class AudioCueSO : ScriptableObject, IAudioCueSO
 {
-	public bool looping = false;
+	public bool looping {get; set;}
 	[SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
 	public AudioClip[] GetClips()

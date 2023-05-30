@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioSourcePool : MonoBehaviour
+public class AudioSourcePool : MonoBehaviour, IAudioSourcePool
 {
     [SerializeField] internal AudioSource _prefab;
 
