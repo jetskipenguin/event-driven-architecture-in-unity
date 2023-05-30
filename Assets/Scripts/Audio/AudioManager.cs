@@ -14,15 +14,15 @@ public class AudioManager : MonoBehaviour
 
     [Header("Listening on channels")]
     [Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change SFXs volume")]
-	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
+	[SerializeField] private IAudioCueEventChannelSO _SFXEventChannel = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
-	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
+	[SerializeField] private IAudioCueEventChannelSO _musicEventChannel = default;
 
     private Dictionary<int, List<AudioSource>> _activeAudioCues = new Dictionary<int, List<AudioSource>>();
     private int _nextUniqueID = 0;
     
-    private List<AudioCueEventChannelSO> _audioChannels = new List<AudioCueEventChannelSO>();
-    private AudioSourcePool _audioSourcePool = default;
+    private List<IAudioCueEventChannelSO> _audioChannels = new List<IAudioCueEventChannelSO>();
+    internal AudioSourcePool _audioSourcePool = default;
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class AudioManager : MonoBehaviour
         _audioChannels.ForEach(d => d.OnAudioCueStopRequested -= StopAudioCue);
     }
 
-    public int PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
+    public int PlayAudioCue(IAudioCueSO audioCue, IAudioConfigurationSO settings, Vector3 position = default)
 	{
 		List<AudioClip> clipsToPlay = audioCue.GetClips().ToList();
         List<AudioSource> sources = clipsToPlay.Select(clip => SetupAudioSource(position, clip, audioCue.looping, settings)).ToList();
@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour
 		return _nextUniqueID;
 	}
 
-    private AudioSource SetupAudioSource(Vector3 position, AudioClip clip, bool isLooping, AudioConfigurationSO settings)
+    private AudioSource SetupAudioSource(Vector3 position, AudioClip clip, bool isLooping, IAudioConfigurationSO settings)
     {
         AudioSource source = _audioSourcePool.Get();
         if (!source)

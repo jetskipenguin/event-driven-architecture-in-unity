@@ -6,9 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObjects/Events/AudioCue Event Channel")]
 public class AudioCueEventChannelSO : ScriptableObject, IAudioCueEventChannelSO
 {
-	public AudioCuePlayAction OnAudioCuePlayRequested;
-	public AudioCueStopAction OnAudioCueStopRequested;
-	public int RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
+	public AudioCuePlayAction OnAudioCuePlayRequested {get; set;}
+	public AudioCueStopAction OnAudioCueStopRequested {get; set;}
+	public int RaisePlayEvent(IAudioCueSO audioCue, IAudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
 	{
 		int audioCueKey = -1;
 
@@ -18,14 +18,14 @@ public class AudioCueEventChannelSO : ScriptableObject, IAudioCueEventChannelSO
 		}
 		else
 		{
-			Debug.LogWarning("An AudioCue play event was requested  for " + audioCue.name +", but nobody picked it up. " +
+			Debug.LogWarning("An AudioCue play event was requested, but nobody picked it up. " +
 				"Check why there is no AudioManager already loaded, " +
 				"and make sure it's listening on this AudioCue Event channel.");
 		}
 
 		if (audioCueKey == -1)
 		{
-			Debug.LogWarning("An AudioCue play event was requested  for " + audioCue.name + ", it was picked up, but had no ID returned");
+			Debug.LogWarning("An AudioCue play event was requested, it was picked up, but had no ID returned");
 		}
 
 		return audioCueKey;
@@ -50,5 +50,5 @@ public class AudioCueEventChannelSO : ScriptableObject, IAudioCueEventChannelSO
 	}
 }
 
-public delegate int AudioCuePlayAction(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace);
+public delegate int AudioCuePlayAction(IAudioCueSO audioCue, IAudioConfigurationSO audioConfiguration, Vector3 positionInSpace);
 public delegate bool AudioCueStopAction(int audioCueKey);
