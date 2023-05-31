@@ -537,6 +537,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3385339440154350480, guid: 25f86442121377a40825401ccf76a2d9, type: 3}
+      propertyPath: _audioSourcePool.unityReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 30cd99cc005d70d4bbd8233af627e811, type: 2}
     - target: {fileID: 3385339440154350481, guid: 25f86442121377a40825401ccf76a2d9, type: 3}
       propertyPath: m_RootOrder
       value: 2
