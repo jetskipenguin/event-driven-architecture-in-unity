@@ -9,20 +9,20 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
     [Header("Audio control")]
-	[SerializeField] private AudioMixer audioMixer = default;
+	[SerializeField] internal AudioMixer _audioMixer = default;
     [Range(0f, 1f)]
-    [SerializeField] private float _masterVolume = 1f;
+    [SerializeField] internal float _masterVolume = 1f;
 
     [Header("Listening on channels")]
     [Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change SFXs volume")]
-	[SerializeField] private SerializableInterface<IAudioCueEventChannelSO> _SFXEventChannel;
+	[SerializeField] internal SerializableInterface<IAudioCueEventChannelSO> _SFXEventChannel;
 
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
-	[SerializeField] private SerializableInterface<IAudioCueEventChannelSO> _musicEventChannel;
+	[SerializeField] internal SerializableInterface<IAudioCueEventChannelSO> _musicEventChannel;
 
     [Header("Audio Source Pool")]
     [Tooltip("The pool allocates new audio sources when needed, and reuses them when they are free")]
-    [SerializeField] private SerializableInterface<IAudioSourcePoolSO> _audioSourcePool;
+    [SerializeField] internal SerializableInterface<IAudioSourcePoolSO> _audioSourcePool;
 
     private Dictionary<int, List<AudioSource>> _activeAudioCues = new Dictionary<int, List<AudioSource>>();
     private int _nextUniqueID = 0;
@@ -75,7 +75,7 @@ public class AudioManager : MonoBehaviour
         source.loop = isLooping;
         source.Play();
 
-        return new AudioSource();
+        return source;
     }
 
     public bool StopAudioCue(int audioCueKey)
@@ -96,7 +96,7 @@ public class AudioManager : MonoBehaviour
 
     public void SetGroupVolume(string parameterName, float normalizedVolume)
 	{
-		bool volumeSet = audioMixer.SetFloat(parameterName, NormalizedToMixerValue(normalizedVolume));
+		bool volumeSet = _audioMixer.SetFloat(parameterName, NormalizedToMixerValue(normalizedVolume));
 		if (!volumeSet)
 			Debug.LogError("The AudioMixer parameter was not found");
 	}

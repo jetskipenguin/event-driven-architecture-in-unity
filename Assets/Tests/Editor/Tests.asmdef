@@ -4,7 +4,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Source"
+        "Source",
+        "TNRD.SerializableInterface",
+        "TNRD.SerializableInterface.Editor"
     ],
     "includePlatforms": [
         "Editor"
