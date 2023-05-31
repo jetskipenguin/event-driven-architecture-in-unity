@@ -83,6 +83,7 @@ public class AudioManager : MonoBehaviour
         if (_activeAudioCues.ContainsKey(audioCueKey))
         {
             _activeAudioCues[audioCueKey].ToList().ForEach(s => _audioSourcePool.Value.Return(s));
+            _activeAudioCues.Remove(audioCueKey);
             return true;
         }
         return false;

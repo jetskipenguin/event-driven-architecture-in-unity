@@ -46,6 +46,11 @@ public class AudioCueEventChannelSO : ScriptableObject, IAudioCueEventChannelSO
 				"and make sure it's listening on this AudioCue Event channel.");
 		}
 
+		if(!success)
+		{
+			Debug.LogWarning("AudioCue stop event failed for " + audioCueKey + ".");
+		}
+
 		return success;
 	}
 }
