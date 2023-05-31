@@ -4,12 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AudioSourcePool", menuName = "ScriptableObjects/Audio/Audio Source Pool")]
 public class AudioSourcePoolSO : ScriptableObject, IAudioSourcePoolSO
 {
-    [SerializeField] private AudioSource _prefab;
-    [SerializeField] private int _initialSize = 10;
+    [SerializeField] internal AudioSource _prefab;
+    [SerializeField] internal int _initialSize = 10;
 
-    private AudioSource[] _pool;
-    private int _currentIndex;
-    private GameObject _parentObject;
+    internal AudioSource[] _pool;
+    internal int _currentIndex;
+    internal GameObject _parentObject;
 
     public void Initialize()
     {
