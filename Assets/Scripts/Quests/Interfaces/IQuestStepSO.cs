@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface IQuestStepSO
 {
-    string givingNPC {get;}
+    NPCSO givingNPC {get;}
     bool isCompleted {get;}
 }

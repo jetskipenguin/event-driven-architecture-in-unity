@@ -92,7 +92,7 @@ public class TestQuestManager
         quest.isCompleted.Returns(true);
         _questManager._quests.Add(quest);
 
-        Assert.IsNull(_questManager.GetValidQuest("NPC"));
+        Assert.IsNull(_questManager.GetValidQuest(Substitute.For<NPCSO>()));
     }
 
     [Test]
@@ -100,12 +100,18 @@ public class TestQuestManager
     {
         IQuestSO quest = Substitute.For<IQuestSO>();
         IQuestStepSO questStep = Substitute.For<IQuestStepSO>();
+        NPCSO npc = Substitute.For<NPCSO>();
+        IQuestSO prereqQuest = Substitute.For<IQuestSO>();
+
         quest.GetCurrentStep().Returns(questStep);
         quest.isCompleted.Returns(false);
-        questStep.givingNPC.Returns("NPC");
+        quest.questPrerequisites.Returns(new IQuestSO[] {prereqQuest});
+        questStep.givingNPC.Returns(npc);
+
+        _questManager._completedQuests.Add(prereqQuest);
         _questManager._quests.Add(quest);
 
-        Assert.AreEqual(quest, _questManager.GetValidQuest("NPC"));
+        Assert.AreEqual(quest, _questManager.GetValidQuest(npc));
     }
 
     [Test]
@@ -113,12 +119,17 @@ public class TestQuestManager
     {
         IQuestSO quest = Substitute.For<IQuestSO>();
         IQuestStepSO questStep = Substitute.For<IQuestStepSO>();
+        NPCSO npc = Substitute.For<NPCSO>();
+        IQuestSO prereqQuest = Substitute.For<IQuestSO>();
+
         quest.GetCurrentStep().Returns(questStep);
         quest.isCompleted.Returns(false);
-        questStep.givingNPC.Returns("NPC");
+        questStep.givingNPC.Returns(npc);
+        quest.questPrerequisites.Returns(new IQuestSO[] {prereqQuest});
+
         _questManager._quests.Add(quest);
 
-        Assert.IsNull(_questManager.GetValidQuest("NotNPC"));
+        Assert.IsNull(_questManager.GetValidQuest(npc));
     }
 
     [Test]
@@ -128,6 +139,6 @@ public class TestQuestManager
         quest.isCompleted.Returns(true);
         _questManager._quests.Add(quest);
 
-        Assert.IsNull(_questManager.GetValidQuest("NPC"));
+        Assert.IsNull(_questManager.GetValidQuest(Substitute.For<NPCSO>()));
     }
 }

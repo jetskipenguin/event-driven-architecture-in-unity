@@ -59,15 +59,13 @@ public class QuestManager : MonoBehaviour
         return true;
     }
 
-    // TODO: make NPC SO and pass in a input parameter, for now I'm using strings
-    public IQuestSO GetValidQuest(string npcName)
+    public IQuestSO GetValidQuest(NPCSO requestingNPC)
     {
         foreach (IQuestSO quest in _quests)
         {
             if (quest.isCompleted) continue;
 
-            // TODO: eventually compare current quest step NPC to input NPC SO
-            if ((quest.GetCurrentStep().givingNPC == npcName) && PrereqsMet(quest))
+            if ((quest.GetCurrentStep().givingNPC == requestingNPC) && PrereqsMet(quest))
             {
                 return quest;
             }
