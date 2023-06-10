@@ -60,6 +60,19 @@ public class TestQuestManager
     }
 
     [Test]
+    public void NextQuestStep_AddsQuestToCompletedQuestsIfQuestIsCompleted()
+    {
+        IQuestSO quest = Substitute.For<IQuestSO>();
+        IQuestStepSO questStep = Substitute.For<IQuestStepSO>();
+        quest.NextStep().Returns(x => null);
+
+        _questManager.StartQuest(quest);
+        _questManager.NextQuestStep(quest);
+
+        Assert.IsTrue(_questManager._completedQuests.Contains(quest));
+    }
+
+    [Test]
     public void NextQuestStep_ReturnsTrueIfQuestIsNotCompleted()
     {
         IQuestSO quest = Substitute.For<IQuestSO>();
@@ -70,5 +83,51 @@ public class TestQuestManager
         _questManager.StartQuest(quest);
 
         Assert.IsTrue(_questManager.NextQuestStep(quest));
+    }
+
+    [Test]
+    public void GetValidQuest_ReturnsNullIfNoQuestsAreValid()
+    {
+        IQuestSO quest = Substitute.For<IQuestSO>();
+        quest.isCompleted.Returns(true);
+        _questManager._quests.Add(quest);
+
+        Assert.IsNull(_questManager.GetValidQuest("NPC"));
+    }
+
+    [Test]
+    public void GetValidQuest_ReturnsQuestIfQuestIsNotCompletedAndPrereqsMet()
+    {
+        IQuestSO quest = Substitute.For<IQuestSO>();
+        IQuestStepSO questStep = Substitute.For<IQuestStepSO>();
+        quest.GetCurrentStep().Returns(questStep);
+        quest.isCompleted.Returns(false);
+        questStep.givingNPC.Returns("NPC");
+        _questManager._quests.Add(quest);
+
+        Assert.AreEqual(quest, _questManager.GetValidQuest("NPC"));
+    }
+
+    [Test]
+    public void GetValidQuest_ReturnsNullIfQuestIsNotCompletedAndPrereqsNotMet()
+    {
+        IQuestSO quest = Substitute.For<IQuestSO>();
+        IQuestStepSO questStep = Substitute.For<IQuestStepSO>();
+        quest.GetCurrentStep().Returns(questStep);
+        quest.isCompleted.Returns(false);
+        questStep.givingNPC.Returns("NPC");
+        _questManager._quests.Add(quest);
+
+        Assert.IsNull(_questManager.GetValidQuest("NotNPC"));
+    }
+
+    [Test]
+    public void GetValidQuest_ReturnsNullIfQuestIsCompleted()
+    {
+        IQuestSO quest = Substitute.For<IQuestSO>();
+        quest.isCompleted.Returns(true);
+        _questManager._quests.Add(quest);
+
+        Assert.IsNull(_questManager.GetValidQuest("NPC"));
     }
 }
