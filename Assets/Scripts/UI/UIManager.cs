@@ -18,13 +18,11 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         _inputReader.PauseEvent += PauseGame;
-        _inputReader.InteractEvent += ShowDialogueBox;
     }
 
     private void OnDisable()
     {
         _inputReader.PauseEvent -= PauseGame;
-        _inputReader.InteractEvent -= ShowDialogueBox;
     }
 
     internal void PauseGame()
@@ -53,9 +51,6 @@ public class UIManager : MonoBehaviour
 
     internal void ShowDialogueBox(Image portrait, string name, string[] dialogueText)
     {
-        _inputReader.InteractEvent -= ShowDialogueBox;
-        _inputReader.InteractEvent += HideDialogueBox;
-
         _dialogueBox.SetActive(true);
 
         if (_dialogueBoxScript == null)
@@ -68,8 +63,5 @@ public class UIManager : MonoBehaviour
     internal void HideDialogueBox()
     {
         _dialogueBox.SetActive(false);
-
-        _inputReader.InteractEvent -= HideDialogueBox;
-        _inputReader.InteractEvent += ShowDialogueBox;
     }    
 }
