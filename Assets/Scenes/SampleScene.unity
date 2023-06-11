@@ -473,7 +473,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1762902136530818263, guid: 137d74068ac800441bc6b9ff44d7295c, type: 3}
       propertyPath: m_Name
-      value: UI
+      value: UIManager
       objectReference: {fileID: 0}
     - target: {fileID: 1762902136530818264, guid: 137d74068ac800441bc6b9ff44d7295c, type: 3}
       propertyPath: m_Pivot.x
