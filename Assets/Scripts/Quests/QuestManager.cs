@@ -41,7 +41,7 @@ public class QuestManager : ScriptableObject
         }
     }
 
-    public bool StartQuest(IQuestSO quest)
+    internal bool StartQuest(IQuestSO quest)
     {
         if (_activeQuests.Contains(quest))
         {
@@ -53,7 +53,7 @@ public class QuestManager : ScriptableObject
         return true;
     }
 
-    public bool NextQuestStep(IQuestSO quest)
+    internal bool NextQuestStep(IQuestSO quest)
     {
         if (!_activeQuests.Contains(quest))
         {

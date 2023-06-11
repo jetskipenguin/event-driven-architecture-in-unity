@@ -9,6 +9,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IGameplayActions, GameI
     public event UnityAction<Vector2> MoveEvent = delegate { };
     public event UnityAction PauseEvent = delegate { };
     public event UnityAction UnpauseEvent = delegate { };
+    public event UnityAction SkipDialogueEvent = delegate { };
 
     // Only referenced for testing purposes
     internal bool isMenuInputEnabled;
@@ -45,4 +46,5 @@ public class InputReaderSO : ScriptableObject, GameInput.IGameplayActions, GameI
     public void OnMove(InputAction.CallbackContext context) { MoveEvent.Invoke(context.ReadValue<Vector2>());}
     public void OnPause(InputAction.CallbackContext context) { PauseEvent.Invoke();}
     public void OnUnpause(InputAction.CallbackContext context) { UnpauseEvent.Invoke();}
+    public void OnSkipDialogue(InputAction.CallbackContext context) { SkipDialogueEvent.Invoke(); }
 }

@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Source",
         "TNRD.SerializableInterface",
-        "TNRD.SerializableInterface.Editor"
+        "TNRD.SerializableInterface.Editor",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"
