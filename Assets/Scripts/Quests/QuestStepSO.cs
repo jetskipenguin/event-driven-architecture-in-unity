@@ -13,5 +13,5 @@ public class QuestStepSO: ScriptableObject
 public class Dialogue
 { 
     NPCSO actor;
-    string text;
+    string[] text;
 }
