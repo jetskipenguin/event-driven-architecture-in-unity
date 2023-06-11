@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-[CreateAssetMenu(menuName = "Audio/Audio Configuration")]
+[CreateAssetMenu(menuName = "ScriptableObjects/Audio/AudioConfigurationSO")]
 public class AudioConfigurationSO : ScriptableObject, IAudioConfigurationSO
 {
 	public AudioMixerGroup OutputAudioMixerGroup = null;
