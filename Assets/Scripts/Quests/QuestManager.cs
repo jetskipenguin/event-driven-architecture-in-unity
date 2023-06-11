@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using TNRD;
 using UnityEngine;
 
-// TODO: consider making this a scriptable object, _activeQuests and _completedQuests will need to persist between scenes
-public class QuestManager : MonoBehaviour
+[CreateAssetMenu(menuName = "ScriptableObjects/Quests/QuestManager")]
+public class QuestManager : ScriptableObject
 {
     [Header("Listening on channels")]
     [Tooltip("The QuestManager listens on this channel for quest related functions")]
@@ -19,14 +19,26 @@ public class QuestManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _questEventChannel.Value.OnStartQuestRequested += StartQuest;
-        _questEventChannel.Value.OnNextQuestStepRequested += NextQuestStep;
+        try {
+            _questEventChannel.Value.OnStartQuestRequested += StartQuest;
+            _questEventChannel.Value.OnNextQuestStepRequested += NextQuestStep;
+        }
+        catch(System.Exception)
+        {
+            Debug.LogWarning("QuestManager: No QuestEventChannelSO found, will not be able to subscribe to quest related events");
+        }
     }
 
     private void OnDisable()
     {
-        _questEventChannel.Value.OnStartQuestRequested -= StartQuest;
-        _questEventChannel.Value.OnNextQuestStepRequested -= NextQuestStep;
+        try {
+            _questEventChannel.Value.OnStartQuestRequested -= StartQuest;
+            _questEventChannel.Value.OnNextQuestStepRequested -= NextQuestStep;
+        }
+        catch(System.Exception)
+        {
+            Debug.LogWarning("QuestManager: No QuestEventChannelSO found, will not be able to unsubscribe to quest related events");
+        }
     }
 
     public bool StartQuest(IQuestSO quest)

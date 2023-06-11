@@ -10,13 +10,13 @@ public class TestQuestManager
     [SetUp]
     public void Setup()
     {
-        _questManager = new GameObject("QuestManager").AddComponent<QuestManager>();
+        _questManager = ScriptableObject.CreateInstance<QuestManager>();
     }
 
     [TearDown]
     public void Teardown()
     {
-        Object.DestroyImmediate(_questManager.gameObject);
+        Object.DestroyImmediate(_questManager);
     }
 
     [Test]
