@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
-//TODO: Check which settings we really need at this level
 [CreateAssetMenu(menuName = "Audio/Audio Configuration")]
 public class AudioConfigurationSO : ScriptableObject, IAudioConfigurationSO
 {
